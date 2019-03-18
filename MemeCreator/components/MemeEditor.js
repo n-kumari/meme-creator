@@ -4,6 +4,7 @@ import {
   Keyboard,
   Text,
   View,
+  Image,
   StyleSheet,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -36,6 +37,10 @@ export default class MemeEditor extends React.Component {
             <View
               collapsable={false}
               ref={this.setMemeRef}>
+              <Image
+                source={{ uri: this.props.photo.uri }}
+                style={styles.imageStyle}>
+              </Image>
             </View>
           </View>
         </TouchableWithoutFeedback>
