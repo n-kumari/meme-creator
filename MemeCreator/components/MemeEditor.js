@@ -8,7 +8,11 @@ import {
   TextInput,
   StyleSheet,
   TouchableWithoutFeedback,
+  Alert,
+  Button,
+  CameraRoll,
 } from 'react-native';
+import { takeSnapshotAsync } from 'expo';
 import PropTypes from 'prop-types';
 
 export default class MemeEditor extends React.Component {
@@ -17,9 +21,21 @@ export default class MemeEditor extends React.Component {
     closeMemeEditor: PropTypes.func
   };
 
-  saveImage = () => {
-
-  };
+  saveImage = async () => {
+    const result = await takeSnapshotAsync(this.memeRef, {
+      format: 'png',
+      result: 'file',
+    });
+    await CameraRoll.saveToCameraRoll(result, 'photo');
+    Alert.alert(
+      'Success',
+      'Meme Saved to the Gallery',
+      [
+        { text: 'More Memes!', onPress: () => this.props.closeMemeEditor() },
+      ],
+      { cancelable: false }
+    );
+  }
 
   setMemeRef = (ref) => {
     this.memeRef = ref;
@@ -59,6 +75,9 @@ export default class MemeEditor extends React.Component {
                 {this.renderMemeTextInput()}
                 {this.renderMemeTextInput()}
               </ImageBackground>
+            </View>
+            <View style={styles.buttons}>
+              <Button title="Save Meme" onPress={this.saveImage} />
             </View>
           </View>
         </TouchableWithoutFeedback>
